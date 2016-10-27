@@ -1,4 +1,5 @@
 # Built application files
+node_modules
 *.apk
 *.ap_
 
