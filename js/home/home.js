@@ -1,6 +1,9 @@
 angular.module('app').component('home', {
     templateUrl: '/js/home/home.html',
 
+    bindings: {
+        firebasesInOrder: '='
+    },
     controller: function($firebaseObject) {
         
         console.log($firebaseObject);

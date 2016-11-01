@@ -6,7 +6,6 @@ angular.module('app').component('nav', {
         
         this.userPreferences = $firebaseObject(fbRef.getPreferencesRef());
         this.userPreferences.$loaded().then((function(data) {
-            console.log(data);
             this.loaded = true;
             this.darktheme = this.userPreferences.theme === 'dark';
         }).bind(this));

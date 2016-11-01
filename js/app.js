@@ -12,10 +12,13 @@ app.run(function($rootScope, $location) {
 app.config(function($routeProvider) {
     $routeProvider
         .when('/home', {
-            template: '<home></home>',
+            template: '<home firebases-in-order="$resolve.firebasesInOrder"></home>',
             resolve: {
-                currentAuth: function (auth) {
-                    return auth.$requireSignIn();
+                firebasesInOrder: function(fbRef, $firebaseArray, auth) {
+                    return auth.$requireSignIn().then(function() {
+                        var query = fbRef.getFirebasesRef().orderByChild('date');
+                        return $firebaseArray(query).$loaded();
+                    })
                 }
             }
         })
@@ -35,9 +38,10 @@ app.config(function($routeProvider) {
         .when('/categories', {
             template: '<category-list categories="$resolve.categories"></category-list>',
             resolve: {
-                categories: function(fbRef, $firebaseObject, auth) {
+                categories: function(fbRef, $firebaseArray, auth) {
                     return auth.$requireSignIn().then(function() {
-                        return $firebaseObject(fbRef.getCategoriesRef()).$loaded();
+                        var query = fbRef.getCategoriesRef().orderByChild('name');
+                        return $firebaseArray(query).$loaded();
                     })
                 }
             }

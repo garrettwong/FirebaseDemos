@@ -4,8 +4,17 @@ angular.module('app').component('categoryList', {
     bindings: {
         categories: '='
     },
-    
+
     controller: function () {
+        console.log(this.categories);
         
+        this.createNewCategory = function (){
+            console.log(this.newCategoryName);
+            
+            this.categories.$add({
+                name: this.newCategoryName
+            });
+            this.newCategoryName = '';
+        }
     }
 });
