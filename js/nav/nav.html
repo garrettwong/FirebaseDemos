@@ -1,4 +1,8 @@
-<div class="navbar navbar-default navbar-static-top">
+<div
+    ng-if="$ctrl.loaded"
+    class="navbar navbar-static-top"
+    ng-class="{'navbar-inverse': $ctrl.darktheme}">
+
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
@@ -27,8 +31,9 @@
                 <a href="#/logout">Logout</a>
             </li>
         </ul>
+
 		<ul class="nav navbar-nav navbar-right">
-			<li><a href="#/login">Login</a></li>
+			<li><a href>Welcome {{$ctrl.userPreferences.displayName}}</a></li>
 		</ul>
 	</div>
 	<!--/.nav-collapse -->

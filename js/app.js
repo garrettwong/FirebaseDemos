@@ -32,6 +32,16 @@ app.config(function($routeProvider) {
                 }
             }
         })
+        .when('/categories', {
+            template: '<category-list categories="$resolve.categories"></category-list>',
+            resolve: {
+                categories: function(fbRef, $firebaseObject, auth) {
+                    return auth.$requireSignIn().then(function() {
+                        return $firebaseObject(fbRef.getCategoriesRef()).$loaded();
+                    })
+                }
+            }
+        })
         .when('/login', {
             template: '<login current-auth="$resolve.currentAuth"></login>',
             resolve: {
