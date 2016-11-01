@@ -1,165 +1,95 @@
 <!DOCTYPE html>
 
-<html>
+<html ng-app="app">
 
 <head>
+	<!-- unnecessary styling -->
+	<link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+	<link href="css/table-styles.css" rel="stylesheet" />
 
-    <!-- unnecessary styling -->
-    <link href="table-styles.css" rel="stylesheet" />
 </head>
 
 <body>
+	<div class="container-fluid">
 
-    <!-- card -->
-	<div class="card">
-		<h2>Firebase User:</h2>
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- ng-view -->
+		        <ng-view></ng-view>
+            </div>
+        </div>
 
-		<table>
-			<thead>
-                <tr>
-                    <th>Key</th>
-                    <th>Val</th>
-                </tr>
-            </thead>
-			
-            <tbody class="authdetails"></tbody>
-		</table>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<!-- card -->
+				<div class="card">
+					<h2>Firebase User:</h2>
+
+					<table>
+						<thead>
+							<tr>
+								<th>Key</th>
+								<th>Val</th>
+							</tr>
+						</thead>
+
+						<tbody class="authdetails"></tbody>
+					</table>
+				</div>
+
+
+				<!-- card -->
+				<div class="card">
+					<h2>Firebase Actions:</h2>
+
+					<input type="text" id="name" placeholder="name" />
+					<input type="text" id="email" placeholder="email" />
+
+					<button id="btnAddUser">Add User</button>
+				</div>
+
+				<!-- card -->
+				<div class="card">
+					<h2>Firebase Object List:</h2>
+
+					<button id="btnGetUsers">Get User(s)</button>
+
+					<ul id="userList"></ul>
+				</div>
+			</div>
+		</div>
 	</div>
 
-    
-    <!-- card -->
-	<div class="card">
-		<h2>Firebase Actions:</h2>
-
-        <input type="text" 
-                id="name" 
-                placeholder="name" />
-        <input type="text" 
-                id="email" 
-                placeholder="email" />
-        
-        <button id="btnAddUser">Add User</button>
-	</div>
-    
-    <!-- card -->
-	<div class="card">
-		<h2>Firebase Object List:</h2>
-
-        <button id="btnGetUsers">Get User(s)</button>
-
-        <ul id="userList"></ul>
-	</div>
 
 
-	<script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
 
+
+
+	<!-- Libraries -->
+	<script src="node_modules/jquery/dist/jquery.js"></script>
 	<!-- Firebase: https://firebase.google.com/docs/web/setup -->
-	<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
-	<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyCJ2bRLYCVApC8Nnf3j5FoaT46YX-9wdLA",
-    authDomain: "cat-me-if-you-can.firebaseapp.com",
-    databaseURL: "https://cat-me-if-you-can.firebaseio.com",
-    storageBucket: "cat-me-if-you-can.appspot.com",
-    messagingSenderId: "948203674523"
-  };
-  firebase.initializeApp(config);
-</script>
-    <script src="read-write.js"></script>
+	<!--<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>-->
+	<script src="node_modules/firebase/firebase.js"></script>
+	<script src="node_modules/angular/angular.js"></script>
+	<script src="node_modules/angular-route/angular-route.js"></script>
+	<script src="node_modules/angularfire/dist/angularfire.js"></script>
 
-	<!-- App Scripts -->
-	<script>
+	<!-- Application Code -->
+	<script src="js/firebase-init.js"></script>
+	<script src="js/read-write.js"></script>
+	<script src="js/firebase-google-auth.js"></script>
 
-    $(function() {
-        // initialization
-        var config = {
-            uid: 'FgOO5JpecmVZqEf6F0KJMIanFsh1'
-        };
-        
-        // get the firebase database reference
-        var database = firebase.database();
-
-        console.log('Firebase Database Reference:', database);
-
-
-        // authenticate that there is no currentUser
-        var user = firebase.auth().currentUser;
-
-        console.log(user);
-
-
-        if (!user) {
-            // sign-in here
-            googleSignIn();
-        }
-
-
-        $('#btnAddUser').click(function(e) {
-            // attempt to write data to the firebase database table
-            writeData(1, $('#name').val(), $('#email').val(), 'test.png');
-
-            var uid = (new Date()).getMilliseconds();
-            var username = $('#name').val();
-            var picture = $('#email').val();
-            var title = picture,
-                body = picture;
-                
-            writeNewUser(uid, username, picture, title, body);
-        });
-
-        $('#btnGetUsers').click(function(e) {
-            readData(1);
-
-            readList();
-        })
-        
-    });
-
-    // auth: https://firebase.google.com/docs/auth/web/google-signin
-    function googleSignIn() {
-        var provider = new firebase.auth.GoogleAuthProvider();
-
-        provider.addScope('https://www.googleapis.com/auth/plus.login');
-
-        firebase.auth().signInWithPopup(provider)
-            .then(function(result) {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                var token = result.credential.accessToken;
-                // The signed-in user info.
-                var user = result.user;
-                
-                console.log('user', user);
-
-                
-                for (var prop in user) {
-                    $tr = $('<tr />');
-                    
-                    var $td = $('<td />');
-
-                    $td.html(prop);
-
-                    $tr.append($td);
-
-                    $td = $('<td />');
-                    $td.html(user[prop]);
-                    $tr.append($td);
-
-                    $('.authdetails').append($tr.prop('outerHTML'));    
-                }
-
-            }).catch(function(error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                // The email of the user's account used.
-                var email = error.email;
-                // The firebase.auth.AuthCredential type that was used.
-                var credential = error.credential;
-            });
-    }
-
-</script>
+	<!-- App Start -->
+	<script src="js/app.js"></script>
+	<script src="js/home/home.js"></script>
+	<script src="js/security/login.js"></script>
+	<script src="js/security/logout.js"></script>
+	<script src="js/security/auth.js"></script>
+	<script src="js/nav/nav.js"></script>
+	<script src="js/userPreferences/editUserPref.js"></script>
+    <script src="js/fbRef.js"></script>
+    
 
 </body>
 

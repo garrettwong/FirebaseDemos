@@ -1,4 +1,8 @@
 // https://firebase.google.com/docs/database/web/read-and-write
+
+var FirebaseApi = {};
+
+
 function readData(userId) {
     return firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
         console.log(snapshot.val());
@@ -45,12 +49,13 @@ function writeNewUser(uid, username, picture, title, body) {
   // A post entry.
   var postData = {
     author: username,
-    uid: uid,
+    //uid: uid,
     body: body,
     title: title,
-    starCount: 0,
     authorPic: picture
   };
+
+  console.log(postData);
 
   // Get a key for a new Post.
   var newPostKey = firebase.database().ref().child('userposts').push().key;
@@ -62,3 +67,10 @@ function writeNewUser(uid, username, picture, title, body) {
 
   return firebase.database().ref().update(updates);
 }
+
+
+
+FirebaseApi.getById = readData;
+FirebaseApi.getAll = readList;
+FirebaseApi.post = writeNewUser;
+FirebaseApi.put = writeData;
