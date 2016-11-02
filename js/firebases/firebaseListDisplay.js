@@ -7,13 +7,12 @@ angular.module('app').component('firebaseListDisplay', {
     },
 
     controller: function () {
-        this.deleteFirebase = function(firebase) {
+        this.deleteFirebase = function (firebase) {
             this.firebases.$remove(firebase);
         };
 
-        this.clickRow = function(firebase) {
-            alert(firebase)
-            this.selectFirebase({firebase: firebase });
+        this.clickRow = function (firebase) {
+            this.selectFirebase({ firebase: firebase });
         };
     }
 

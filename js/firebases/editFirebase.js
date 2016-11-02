@@ -3,12 +3,14 @@ angular.module('app').component('editFirebase', {
     bindings: {
         categories: '=',
         createNewFirebase: '&',
-        editedFirebase: '='
+        editedFirebase: '=',
+        updateFirebase: '&'
     },
     controller: function ($scope) {
 
-        $scope.$watch('$ctrl.editedExpense', (function (newData) {
+        $scope.$watch('$ctrl.editedFirebase', (function (newData) {
             if (!!newData) {
+                this.editing = true;
                 this.amount = newData.amount;
                 this.desc = newData.description;
                 var date = new Date(newData.date);
@@ -46,12 +48,15 @@ angular.module('app').component('editFirebase', {
         };
 
         this.save = function () {
+            console.log(this);
+
             this.editedFirebase.amount = parseFloat(this.amount);
             this.editedFirebase.payee = this.payee;
             this.editedFirebase.date = new Date(this.date).toJSON();
+            this.editedFirebase.description = this.desc;
             this.editedFirebase.category = { name: this.selectedCategory.name, id: this.selectedCategory.$id };
             //save data
-            this.updateExpense();
+            this.updateFirebase();
             this.setDefaults();
             this.editing = false;
             this.editedFirebase = null;

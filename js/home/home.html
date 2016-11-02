@@ -2,7 +2,10 @@
 
 <h3>Firebases: <small>{{$ctrl.firebasesInOrder.getTotal() | currency }}</small></h3>
 
-<firebase-list-display firebase-data="$ctrl.firebasesInOrder"></firebase-list-display>
+<firebase-list-display 
+    firebase-data="$ctrl.firebasesInOrder"
+    select-firebase="$ctrl.editFirebase(firebase)"
+    update-firebase="$ctrl.updateFirebase()"></firebase-list-display>
 
 <edit-firebase categories="$ctrl.categories"
     edited-firebase="$ctrl.editedFirebase"
