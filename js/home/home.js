@@ -2,16 +2,24 @@ angular.module('app').component('home', {
     templateUrl: '/js/home/home.html',
 
     bindings: {
-        firebasesInOrder: '='
+        firebasesInOrder: '=',
+        categories: '='
     },
     controller: function($firebaseObject) {
         
-        console.log($firebaseObject);
+        console.log(this.firebasesInOrder);
 
-        var ref = firebase.database().ref();
-        // download the data into a local object
-        this.data = $firebaseObject(ref);
-        // putting a console.log here won't work, see below
+        this.createFirebase = function (firebaseData) {
+            this.firebasesInOrder.$add(firebaseData);
+        };
+
+        this.editFirebase = function(firebase) {
+            this.editedFirebase = firebase;
+        };
+
+        this.updateFirebase = function() {
+            this.firebasesInOrder.$save(this.editedFirebase);
+        };
     }
 });
 

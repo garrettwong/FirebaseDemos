@@ -1,27 +1,13 @@
 <nav></nav>
 
-<h3>Firebases</h3>
+<h3>Firebases: <small>{{$ctrl.firebasesInOrder.getTotal() | currency }}</small></h3>
 
-<table class="table table-hover table-condensed">
-    <thead>
-        <th width="18%">Date</th>
-        <th width="18%">Payee</th>
-        <th width="18%">Description</th>
-        <th width="18%">Category</th>
-        <th width="18%">Amount</th>
-        <th width="10%"></th>
-    </thead>
-    <tbody class="pointable">
-        <tr ng-repeat="firebase in $ctrl.firebasesInOrder">
-            <td>{{firebase.date | date:'shortDate'}}</td>
-            <td>{{firebase.payee}}</td>
-            <td>{{firebase.description}}</td>
-            <td>{{firebase.category}}</td>
-            <td>{{firebase.amount | currency}}</td>
-            <td>&nbsp;</td>
-        </tr>
-    </tbody>
-</table>
+<firebase-list-display firebase-data="$ctrl.firebasesInOrder"></firebase-list-display>
+
+<edit-firebase categories="$ctrl.categories"
+    edited-firebase="$ctrl.editedFirebase"
+    update-firebase="$ctrl.updateFirebase()"
+    create-new-firebase="$ctrl.createFirebase(firebaseData)"></edit-firebase>
 
 <ul>
     <li>NoSQL</li>

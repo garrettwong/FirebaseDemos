@@ -12,11 +12,17 @@ app.run(function($rootScope, $location) {
 app.config(function($routeProvider) {
     $routeProvider
         .when('/home', {
-            template: '<home firebases-in-order="$resolve.firebasesInOrder"></home>',
+            template: '<home categories="$resolve.categories" firebases-in-order="$resolve.firebasesInOrder"></home>',
             resolve: {
-                firebasesInOrder: function(fbRef, $firebaseArray, auth) {
+                firebasesInOrder: function(fbRef, firebaseList, auth) {
                     return auth.$requireSignIn().then(function() {
                         var query = fbRef.getFirebasesRef().orderByChild('date');
+                        return firebaseList(query).$loaded();
+                    });
+                },
+                categories: function (fbRef, $firebaseArray, auth) {
+                    return auth.$requireSignIn().then(function() {
+                        var query = fbRef.getCategoriesRef().orderByChild('name');
                         return $firebaseArray(query).$loaded();
                     })
                 }
@@ -31,7 +37,7 @@ app.config(function($routeProvider) {
                 userPreferences: function(fbRef, $firebaseObject, auth) {
                     return auth.$requireSignIn().then(function() {
                         return $firebaseObject(fbRef.getPreferencesRef()).$loaded();
-                    })
+                    });
                 }
             }
         })
@@ -42,7 +48,7 @@ app.config(function($routeProvider) {
                     return auth.$requireSignIn().then(function() {
                         var query = fbRef.getCategoriesRef().orderByChild('name');
                         return $firebaseArray(query).$loaded();
-                    })
+                    });
                 }
             }
         })

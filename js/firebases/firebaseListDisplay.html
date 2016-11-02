@@ -1,0 +1,32 @@
+<table class="table table-hover table-condensed">
+    <thead>
+        <th width="18%">Date</th>
+        <th width="18%">Payee</th>
+        <th width="18%">Description</th>
+        <th width="18%">Category</th>
+        <th width="18%">Amount</th>
+        <th width="10%"></th>
+    </thead>
+    <tbody class="pointable">
+        <tr ng-repeat="firebase in $ctrl.firebases"
+            ng-mouseenter="hovering = true"
+            ng-mouseleave="hovering = false"
+            ng-click="$ctrl.clickRow(firebase)">
+            <td>{{firebase.date | date:'shortDate'}}</td>
+            <td>{{firebase.payee}}</td>
+            <td>{{firebase.description}}</td>
+            <td>{{firebase.category.name}}</td>
+            <td>{{firebase.amount | currency}}</td>
+            <td>
+                <span
+                    ng-show="hovering"
+                    class="glyphicon glyphicon-remove"
+                    ng-mouseenter="delhovering = true"
+                    ng-mouseleave="delhovering = false"
+                    ng-class="{'hover-delete': delhovering}"
+                    ng-click="$ctrl.deleteFirebase(firebase)">
+                </span>
+            </td>
+        </tr>
+    </tbody>
+</table>
