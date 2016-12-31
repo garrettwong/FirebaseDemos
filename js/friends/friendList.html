@@ -1,0 +1,12 @@
+<nav></nav>
+
+<h1>Friends</h1>
+
+<div ng-repeat="friend in $ctrl.friends">
+	{{friend.name}} @ {{friend.location}}
+</div>
+
+<input type="text" ng-model="$ctrl.friend.name" placeholder="name" />
+<input type="text" ng-model="$ctrl.friend.location" placeholder="location" />
+
+<button class="btn btn-primary btn-sm" ng-click="$ctrl.createNewFriend()">Create</button>

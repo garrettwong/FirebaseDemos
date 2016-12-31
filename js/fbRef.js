@@ -15,6 +15,10 @@ angular.module('app').factory('fbRef', function(auth) {
         
         getFirebasesRef: function () {
             return firebase.database().ref('firebases').child(auth.$getAuth().uid);
+        },
+
+        getFriendsRef: function () {
+            return firebase.database().ref('friends').child(auth.$getAuth().uid);
         }
     }
 })

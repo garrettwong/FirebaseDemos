@@ -56,6 +56,17 @@ app.config(function($routeProvider) {
                 }
             }
         })
+        .when('/friends', {
+            template: '<friend-list friends="$resolve.friends"></category-list>',
+            resolve: {
+                friends: function(fbRef, $firebaseArray, auth) {
+                    return auth.$requireSignIn().then(function() {
+                        var query = fbRef.getFriendsRef().orderByChild('name');
+                        return $firebaseArray(query).$loaded();
+                    });
+                }
+            }
+        })
         .when('/login', {
             template: '<login current-auth="$resolve.currentAuth"></login>',
             resolve: {
